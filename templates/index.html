@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Fake News Generator & Detector{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Hero Section -->
+        <div class="card mb-5">
+            <div class="card-header text-center">
+                <h1 class="display-4 mb-3">
+                    <i class="fas fa-robot me-3"></i>
+                    Fake News Generator & Detector
+                </h1>
+                <p class="lead mb-0">
+                    AI-powered tools for generating and detecting fake news using advanced NLP techniques
+                </p>
+            </div>
+            <div class="card-body text-center">
+                <p class="text-muted">
+                    This educational tool demonstrates how artificial intelligence can both create and identify fake news patterns. 
+                    Use it responsibly to understand media literacy and AI capabilities.
+                </p>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <a href="/generate" class="btn btn-primary btn-lg me-2">
+                            <i class="fas fa-magic me-2"></i>Generate Fake News
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/detect" class="btn btn-success btn-lg">
+                            <i class="fas fa-search me-2"></i>Detect Fake News
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h4 class="card-title">Generate Fake News</h4>
+                        <p class="card-text">
+                            Create realistic fake news articles using AI templates and patterns. 
+                            Choose from conspiracy, sensational, or clickbait categories.
+                        </p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>Multiple categories</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Realistic content</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Dynamic generation</li>
+                        </ul>
+                        <a href="/generate" class="btn btn-primary">
+                            <i class="fas fa-arrow-right me-1"></i>Try Generator
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h4 class="card-title">Detect Fake News</h4>
+                        <p class="card-text">
+                            Analyze text content using NLP techniques to identify potential fake news patterns 
+                            and provide confidence scores with explanations.
+                        </p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>NLP analysis</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Confidence scoring</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Detailed explanations</li>
+                        </ul>
+                        <a href="/detect" class="btn btn-success">
+                            <i class="fas fa-arrow-right me-1"></i>Try Detector
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h4 class="card-title">AI & NLP Technology</h4>
+                        <p class="card-text">
+                            Built with advanced natural language processing techniques including 
+                            feature extraction, pattern recognition, and machine learning algorithms.
+                        </p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>Feature extraction</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Pattern recognition</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Weighted scoring</li>
+                        </ul>
+                        <a href="/detect" class="btn btn-info">
+                            <i class="fas fa-arrow-right me-1"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="card mt-5">
+            <div class="card-header">
+                <h3 class="mb-0">
+                    <i class="fas fa-cogs me-2"></i>How It Works
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-magic text-primary me-2"></i>Generation Process</h5>
+                        <ol class="list-group list-group-numbered">
+                            <li class="list-group-item border-0 ps-0">Select a category (conspiracy, sensational, clickbait)</li>
+                            <li class="list-group-item border-0 ps-0">Choose from predefined templates</li>
+                            <li class="list-group-item border-0 ps-0">Fill templates with random but realistic content</li>
+                            <li class="list-group-item border-0 ps-0">Generate metadata (author, source, date)</li>
+                        </ol>
+                    </div>
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-search text-success me-2"></i>Detection Process</h5>
+                        <ol class="list-group list-group-numbered">
+                            <li class="list-group-item border-0 ps-0">Extract linguistic features from text</li>
+                            <li class="list-group-item border-0 ps-0">Analyze patterns and indicators</li>
+                            <li class="list-group-item border-0 ps-0">Apply weighted scoring algorithm</li>
+                            <li class="list-group-item border-0 ps-0">Generate confidence score and explanation</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Educational Notice -->
+        <div class="alert alert-warning mt-4" role="alert">
+            <h5 class="alert-heading">
+                <i class="fas fa-exclamation-triangle me-2"></i>Educational Purpose Only
+            </h5>
+            <p class="mb-0">
+                This tool is designed for educational and research purposes to understand AI capabilities, 
+                media literacy, and fake news patterns. Always verify information from credible sources 
+                and use critical thinking when consuming media.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %} 

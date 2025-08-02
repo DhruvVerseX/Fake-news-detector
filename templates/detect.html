@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+
+{% block title %}Detect Fake News - Fake News Generator & Detector{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Header -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="mb-0">
+                    <i class="fas fa-search me-2"></i>Detect Fake News
+                </h2>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Analyze text content using advanced NLP techniques to identify potential fake news patterns. 
+                    Get confidence scores and detailed explanations for the detection results.
+                </p>
+            </div>
+        </div>
+
+        <!-- Detection Form -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-cog me-2"></i>Input Text for Analysis
+                </h4>
+            </div>
+            <div class="card-body">
+                <form id="detectForm">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">
+                            <i class="fas fa-heading me-1"></i>Article Title (Optional)
+                        </label>
+                        <input type="text" class="form-control" id="title" name="title" 
+                               placeholder="Enter article title...">
+                        <div class="form-text">
+                            Including the title can improve detection accuracy
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="content" class="form-label">
+                            <i class="fas fa-file-text me-1"></i>Article Content *
+                        </label>
+                        <textarea class="form-control" id="content" name="content" rows="8" 
+                                  placeholder="Enter the article content to analyze..." required></textarea>
+                        <div class="form-text">
+                            The more content you provide, the more accurate the analysis will be
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success btn-lg" id="detectBtn">
+                            <i class="fas fa-search me-2"></i>Analyze Text
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="clearForm()">
+                            <i class="fas fa-eraser me-2"></i>Clear
+                        </button>
+                        <button type="button" class="btn btn-outline-info" onclick="loadSampleText()">
+                            <i class="fas fa-lightbulb me-2"></i>Load Sample
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Detection Results -->
+        <div id="detectionResult" class="card result-card" style="display: none;">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>Detection Results
+                </h4>
+            </div>
+            <div class="card-body">
+                <!-- Result Summary -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="text-center p-3 border rounded">
+                            <h5 id="resultLabel" class="mb-2"></h5>
+                            <div class="display-6" id="resultIcon"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-percentage me-2"></i>Confidence Score</h5>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="confidenceFill"></div>
+                        </div>
+                        <p class="text-muted mt-2" id="confidenceText"></p>
+                    </div>
+                </div>
+                
+                <!-- Explanation -->
+                <div class="mb-4">
+                    <h5><i class="fas fa-lightbulb me-2"></i>Analysis Explanation</h5>
+                    <div class="alert alert-info">
+                        <p id="explanation" class="mb-0"></p>
+                    </div>
+                </div>
+                
+                <!-- Feature Analysis -->
+                <div class="mb-4">
+                    <h5><i class="fas fa-microscope me-2"></i>Feature Analysis</h5>
+                    <div class="row" id="featureAnalysis">
+                        <!-- Features will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary" onclick="analyzeAgain()">
+                        <i class="fas fa-sync me-2"></i>Analyze Another
+                    </button>
+                    <a href="/generate" class="btn btn-info">
+                        <i class="fas fa-magic me-2"></i>Generate Test Content
+                    </a>
+                    <button class="btn btn-outline-secondary" onclick="exportResults()">
+                        <i class="fas fa-download me-2"></i>Export Results
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detection Information -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>How Detection Works
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Fake News Indicators
+                        </h6>
+                        <ul class="small text-muted">
+                            <li>Suspicious buzzwords (BREAKING, SHOCKING, SECRET)</li>
+                            <li>Excessive emotional language</li>
+                            <li>Artificial urgency creation</li>
+                            <li>Absolute/exaggerated claims</li>
+                            <li>Excessive capitalization</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-success">
+                            <i class="fas fa-check-circle me-2"></i>Credibility Indicators
+                        </h6>
+                        <ul class="small text-muted">
+                            <li>Credible source references</li>
+                            <li>Evidence and data citations</li>
+                            <li>Balanced language</li>
+                            <li>Professional tone</li>
+                            <li>Factual statements</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning mt-3">
+                    <h6 class="alert-heading">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Important Note
+                    </h6>
+                    <p class="mb-0">
+                        This detection tool uses AI algorithms and is not 100% accurate. 
+                        Always verify information from multiple credible sources and use critical thinking.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('detectForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const detectBtn = document.getElementById('detectBtn');
+    const originalText = detectBtn.innerHTML;
+    
+    try {
+        showLoading(detectBtn);
+        
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+        
+        if (!content.trim()) {
+            showAlert('Please enter article content', 'warning');
+            return;
+        }
+        
+        const response = await fetch('/api/detect', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ title: title, content: content })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            displayResults(data.result);
+            showAlert('Analysis completed successfully!', 'success');
+        } else {
+            showAlert('Error analyzing text: ' + data.error, 'danger');
+        }
+    } catch (error) {
+        showAlert('Error: ' + error.message, 'danger');
+    } finally {
+        hideLoading(detectBtn, originalText);
+    }
+});
+
+function displayResults(result) {
+    // Set result label and icon
+    const resultLabel = document.getElementById('resultLabel');
+    const resultIcon = document.getElementById('resultIcon');
+    
+    if (result.is_fake) {
+        resultLabel.innerHTML = '<span class="text-danger">FAKE NEWS DETECTED</span>';
+        resultIcon.innerHTML = '<i class="fas fa-times-circle text-danger"></i>';
+    } else {
+        resultLabel.innerHTML = '<span class="text-success">LIKELY REAL NEWS</span>';
+        resultIcon.innerHTML = '<i class="fas fa-check-circle text-success"></i>';
+    }
+    
+    // Set confidence score
+    const confidenceText = document.getElementById('confidenceText');
+    const confidenceFill = document.getElementById('confidenceFill');
+    
+    const percentage = formatPercentage(result.confidence_score);
+    confidenceText.textContent = `${percentage} confidence`;
+    
+    confidenceFill.style.width = `${result.confidence_score * 100}%`;
+    confidenceFill.className = `confidence-fill ${result.is_fake ? 'fake' : 'real'}`;
+    
+    // Set explanation
+    document.getElementById('explanation').textContent = result.explanation;
+    
+    // Display feature analysis
+    displayFeatureAnalysis(result.features);
+    
+    // Show results
+    document.getElementById('detectionResult').style.display = 'block';
+    document.getElementById('detectionResult').scrollIntoView({ behavior: 'smooth' });
+}
+
+function displayFeatureAnalysis(features) {
+    const container = document.getElementById('featureAnalysis');
+    container.innerHTML = '';
+    
+    const importantFeatures = [
+        { key: 'fake_indicator_ratio', name: 'Fake Indicators', color: 'danger' },
+        { key: 'credibility_indicator_ratio', name: 'Credibility Indicators', color: 'success' },
+        { key: 'emotional_word_ratio', name: 'Emotional Language', color: 'warning' },
+        { key: 'urgency_word_ratio', name: 'Urgency Patterns', color: 'info' },
+        { key: 'exaggeration_word_ratio', name: 'Exaggeration', color: 'secondary' },
+        { key: 'all_caps_ratio', name: 'Capitalization', color: 'dark' }
+    ];
+    
+    importantFeatures.forEach(feature => {
+        const value = features[feature.key] || 0;
+        const percentage = formatPercentage(value);
+        
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4 mb-3';
+        col.innerHTML = `
+            <div class="border rounded p-3">
+                <h6 class="text-${feature.color}">${feature.name}</h6>
+                <div class="progress mb-2" style="height: 8px;">
+                    <div class="progress-bar bg-${feature.color}" style="width: ${value * 100}%"></div>
+                </div>
+                <small class="text-muted">${percentage}</small>
+            </div>
+        `;
+        container.appendChild(col);
+    });
+}
+
+function clearForm() {
+    document.getElementById('title').value = '';
+    document.getElementById('content').value = '';
+    document.getElementById('detectionResult').style.display = 'none';
+}
+
+function loadSampleText() {
+    const sampleText = `BREAKING: Scientists SHOCKINGLY discover that the government has been hiding INCREDIBLE technology from the public! This AMAZING revelation will change EVERYTHING you know about modern science. According to "insider sources," this revolutionary breakthrough has been suppressed for YEARS by big corporations who don't want you to know the truth!`;
+    
+    document.getElementById('title').value = 'SHOCKING Government Cover-Up Revealed!';
+    document.getElementById('content').value = sampleText;
+}
+
+function analyzeAgain() {
+    clearForm();
+    document.getElementById('content').focus();
+}
+
+function exportResults() {
+    const result = {
+        title: document.getElementById('title').value,
+        content: document.getElementById('content').value,
+        isFake: document.getElementById('resultLabel').textContent.includes('FAKE'),
+        confidence: document.getElementById('confidenceText').textContent,
+        explanation: document.getElementById('explanation').textContent,
+        timestamp: new Date().toISOString()
+    };
+    
+    const dataStr = JSON.stringify(result, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(dataBlob);
+    link.download = 'fake-news-detection-result.json';
+    link.click();
+    
+    showAlert('Results exported successfully!', 'success');
+}
+</script>
+{% endblock %} 
